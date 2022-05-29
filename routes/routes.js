@@ -1,9 +1,11 @@
 const express = require('express');
 const Model = require('../models/model');
+const ModelAnime = require('../models/anime_model');
 const router = express.Router();
 
 //Post Method
 router.post('/post', async (req, res) => {
+  console.log(req.body);
     const data = new Model({
         name: req.body.name,
         age: req.body.age
@@ -18,6 +20,22 @@ router.post('/post', async (req, res) => {
     }
 })
 
+//Post Anime Method
+router.post('/postAnime', async (req, res) => {
+  console.log(req.body);
+    const data = new ModelAnime({
+        animeName: req.body.animeName,
+        animeCharacter: req.body.animeCharacter
+    })
+
+    try {
+        const dataToSave = await data.save();
+        res.status(200).json(dataToSave)
+    }
+    catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+});
 //Get all Method
 router.get('/getAll', async (req, res) => {
     try {
@@ -28,6 +46,18 @@ router.get('/getAll', async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
+
+router.get('/getAllAnime', async (req, res) => {
+    try {
+        const data = await ModelAnime.find();
+        res.json(data)
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+
+
 
 //Get by ID Method
 router.get('/getOne/:id', async (req, res) => {
